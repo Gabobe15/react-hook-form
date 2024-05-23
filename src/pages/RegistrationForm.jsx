@@ -11,21 +11,34 @@ import { useForm } from 'react-hook-form';
 import TextFields from '../component/TextField';
 import SelectFields from '../component/SelectFields';
 import CheckBoxFields from '../component/CheckBoxFields';
+import { passwdRegExp, phoneRegExp } from '../utils/AddError';
 
 const schema = yup.object({
 	fullName: yup.string().required('Full name is required'),
-	email: yup.string().email().required('email field is required'),
-	number: yup.number().positive().integer().required('number is required'),
+	email: yup.string().required('email field is required').email(),
+	mobile: yup
+		.string()
+		.required('mobile number is required')
+		.matches(phoneRegExp, 'Phone number is not valid'),
 	country: yup.string().required('country is required'),
-	password: yup.string().required('password is required'),
-	confirmPassword: yup.string().required('confirm password is required'),
-	privacy: yup.boolean(),
+	password: yup
+		.string()
+		.required('password is required')
+		.matches(
+			passwdRegExp,
+			'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number, and one special case Character'
+		),
+	confirmPassword: yup
+		.string()
+		.oneOf([yup.ref('password'), null], 'Password must match'),
+	privacy: yup.bool().oneOf([true], 'Field must be checked'),
 });
 
 const RegistrationForm = () => {
 	//
 	const {
 		handleSubmit,
+		reset,
 		control,
 		formState: { errors },
 	} = useForm({
@@ -41,6 +54,7 @@ const RegistrationForm = () => {
 	});
 	const onSubmit = (e) => {
 		console.log(e);
+		reset();
 	};
 
 	return (

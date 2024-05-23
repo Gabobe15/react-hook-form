@@ -1,8 +1,9 @@
 import { FormControl, TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { addErrorIntoField } from '../utils/AddError';
+import ErrorMessage from './ErrorMessage';
 
-const TextFields = ({ label, inputProps, name, control, errors }) => {
+const TextFields = ({ label, inputProps, name, control, errors, }) => {
 	return (
 		<FormControl fullWidth sx={{ mt: '1rem' }}>
 			<Controller
@@ -19,6 +20,7 @@ const TextFields = ({ label, inputProps, name, control, errors }) => {
 					/>
 				)}
 			/>
+			{errors[name] ? <ErrorMessage message={errors[name].message} /> : null}
 		</FormControl>
 	);
 };

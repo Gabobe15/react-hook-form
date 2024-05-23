@@ -1,8 +1,10 @@
 import { FormControl, MenuItem, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
+import { addErrorIntoField } from '../utils/AddError';
+import ErrorMessage from './ErrorMessage';
 
-const SelectFields = ({ label, name, control }) => {
+const SelectFields = ({ label, name, control, errors }) => {
 	const [listCountries, setListCountries] = useState([]);
 
 	const countryNames = listCountries?.map((c) => c.name.common).sort();
@@ -25,7 +27,14 @@ const SelectFields = ({ label, name, control }) => {
 				name={name}
 				control={control}
 				render={({ field }) => (
-					<TextField {...field} required label={label} variant="filled" select>
+					<TextField
+						{...addErrorIntoField(errors[name])}
+						{...field}
+						required
+						label={label}
+						variant="filled"
+						select
+					>
 						<MenuItem>
 							<em>None</em>
 						</MenuItem>
@@ -37,6 +46,7 @@ const SelectFields = ({ label, name, control }) => {
 					</TextField>
 				)}
 			/>
+			{errors[name] ? <ErrorMessage message={errors[name].message} /> : null}
 		</FormControl>
 	);
 };
