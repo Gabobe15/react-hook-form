@@ -4,8 +4,24 @@ import TextFields from '../component/TextField';
 import SelectFields from '../component/SelectFields';
 import CheckBoxFields from '../component/CheckBoxFields';
 import { NavLink } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 const RegistrationForm = () => {
+	//
+	const { handleSubmit, control } = useForm({
+		defaultValues: {
+			fullName: '',
+			email: '',
+			mobile: '',
+			password: '',
+			confirmPassword: '',
+			privacy: false,
+		},
+	});
+	const onSubmit = (e) => {
+		console.log(e);
+	};
+
 	return (
 		<>
 			<Box
@@ -24,11 +40,12 @@ const RegistrationForm = () => {
 				</Typography>
 
 				{/* form  */}
-				<Box component="form">
-					<TextFields name="fullName" label="Full Name" />
-					<TextFields name="email" label="Email" />
+				<Box noValidate component="form" onSubmit={handleSubmit(onSubmit)}>
+					<TextFields control={control} name="fullName" label="Full Name" />
+					<TextFields control={control} name="email" label="Email" />
 					<TextFields
-						name="phone"
+						control={control}
+						name="mobile"
 						label="Mobile phone"
 						inputProps={{
 							startAdornment: (
@@ -37,10 +54,14 @@ const RegistrationForm = () => {
 						}}
 						type="number"
 					/>
-					<SelectFields label="Country" />
-					<TextFields name="password" label="Password" />
-					<TextFields name="confirmPassword" label="Confirm Password" />
-					<CheckBoxFields />
+					<SelectFields control={control} name="country" label="Country" />
+					<TextFields control={control} name="password" label="Password" />
+					<TextFields
+						control={control}
+						name="confirmPassword"
+						label="Confirm Password"
+					/>
+					<CheckBoxFields name='privacy' control={control} />
 					<Button
 						type="submit"
 						fullWidth
@@ -51,7 +72,7 @@ const RegistrationForm = () => {
 					</Button>
 				</Box>
 			</Box>
-			<Typography >
+			<Typography>
 				Have account: <NavLink to="/login/">Login</NavLink>
 			</Typography>
 		</>
