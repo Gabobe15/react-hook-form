@@ -1,9 +1,33 @@
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import TextFields from '../component/TextField';
 import { NavLink } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+import TextFields from '../component/TextField';
+
+const schema = yup.object({
+	email: yup.string().email().required('email is required'),
+	password: yup.string().required('password is required'),
+});
 
 const LoginForm = () => {
+	const {
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm({
+		resolver: yupResolver(schema),
+	});
+
+	const onSubmit = (e) => {
+		console.log(e);
+	};
+
+	console.log(errors);
+
 	return (
 		<>
 			<Box
@@ -22,9 +46,19 @@ const LoginForm = () => {
 				</Typography>
 
 				{/* form  */}
-				<Box component="form">
-					<TextFields name="email" label="Email" />
-					<TextFields name="password" label="Password" />
+				<Box noValidate component="form" onSubmit={handleSubmit(onSubmit)}>
+					<TextFields
+						errors={errors}
+						name="email"
+						control={control}
+						label="Email"
+					/>
+					<TextFields
+						errors={errors}
+						name="password"
+						control={control}
+						label="Password"
+					/>
 					<Button
 						type="submit"
 						fullWidth

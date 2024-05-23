@@ -1,14 +1,34 @@
 import { Avatar, Box, Button, InputAdornment, Typography } from '@mui/material';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+
+import { NavLink } from 'react-router-dom';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+import { useForm } from 'react-hook-form';
+
 import TextFields from '../component/TextField';
 import SelectFields from '../component/SelectFields';
 import CheckBoxFields from '../component/CheckBoxFields';
-import { NavLink } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+
+const schema = yup.object({
+	fullName: yup.string().required('Full name is required'),
+	email: yup.string().email().required('email field is required'),
+	number: yup.number().positive().integer().required('number is required'),
+	country: yup.string().required('country is required'),
+	password: yup.string().required('password is required'),
+	confirmPassword: yup.string().required('confirm password is required'),
+	privacy: yup.boolean(),
+});
 
 const RegistrationForm = () => {
 	//
-	const { handleSubmit, control } = useForm({
+	const {
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm({
 		defaultValues: {
 			fullName: '',
 			email: '',
@@ -17,6 +37,7 @@ const RegistrationForm = () => {
 			confirmPassword: '',
 			privacy: false,
 		},
+		resolver: yupResolver(schema),
 	});
 	const onSubmit = (e) => {
 		console.log(e);
@@ -41,9 +62,20 @@ const RegistrationForm = () => {
 
 				{/* form  */}
 				<Box noValidate component="form" onSubmit={handleSubmit(onSubmit)}>
-					<TextFields control={control} name="fullName" label="Full Name" />
-					<TextFields control={control} name="email" label="Email" />
 					<TextFields
+						errors={errors}
+						control={control}
+						name="fullName"
+						label="Full Name"
+					/>
+					<TextFields
+						errors={errors}
+						control={control}
+						name="email"
+						label="Email"
+					/>
+					<TextFields
+						errors={errors}
 						control={control}
 						name="mobile"
 						label="Mobile phone"
@@ -54,14 +86,26 @@ const RegistrationForm = () => {
 						}}
 						type="number"
 					/>
-					<SelectFields control={control} name="country" label="Country" />
-					<TextFields control={control} name="password" label="Password" />
+					<SelectFields
+						errors={errors}
+						control={control}
+						name="country"
+						label="Country"
+					/>
 					<TextFields
+						errors={errors}
+						control={control}
+						name="password"
+						label="Password"
+					/>
+					<TextFields
+						errors={errors}
 						control={control}
 						name="confirmPassword"
 						label="Confirm Password"
 					/>
-					<CheckBoxFields name='privacy' control={control} />
+
+					<CheckBoxFields errors={errors} name="privacy" control={control} />
 					<Button
 						type="submit"
 						fullWidth
