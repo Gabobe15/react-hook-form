@@ -1,19 +1,27 @@
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import TextFields from '../component/TextField';
+import { passwdRegExp } from '../utils/AddError';
 
 const schema = yup.object({
-	email: yup.string().email().required('email is required'),
-	password: yup.string().required('password is required'),
+	email: yup.string().required('email is required').email(),
+	password: yup
+		.string()
+		.required('password is required')
+		.matches(
+			passwdRegExp,
+			'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number, and one special case Character'
+		),
 });
 
 const LoginForm = () => {
+	const navigate = useNavigate();
 	const {
 		handleSubmit,
 		control,
@@ -24,9 +32,8 @@ const LoginForm = () => {
 
 	const onSubmit = (e) => {
 		console.log(e);
+		navigate('/');
 	};
-
-	console.log(errors);
 
 	return (
 		<>

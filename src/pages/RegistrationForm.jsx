@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, InputAdornment, Typography } from '@mui/material';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -35,6 +35,7 @@ const schema = yup.object({
 });
 
 const RegistrationForm = () => {
+	const navigate = useNavigate()
 	//
 	const {
 		handleSubmit,
@@ -55,6 +56,7 @@ const RegistrationForm = () => {
 	const onSubmit = (e) => {
 		console.log(e);
 		reset();
+		navigate('/')
 	};
 
 	return (
